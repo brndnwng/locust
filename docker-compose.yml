@@ -1,0 +1,32 @@
+version: "3.4"
+
+x-common: &common
+  image: locustio/locust
+  environment: &common-env
+    TARGET_URL: http://host.docker.internal:8080
+    LOCUSTFILE_PATH: /tests/basic.py
+    INPUT_DATE_RANGES: ${INPUT_DATE_RANGES}
+    INPUT_QUERIES: ${INPUT_QUERIES}
+    INPUT_WINDOW: ${INPUT_WINDOW}
+    INPUT_TIMEZONE: ${INPUT_TIMEZONE}
+    GRAPHITE_HOST: ${GRAPHITE_HOST}
+
+  volumes:
+    - ~/sandbox/locust/examples:/tests
+
+services:
+  locust-master:
+    <<: *common
+    ports:
+      - 8089:8089
+    environment:
+      <<: *common-env
+      LOCUSTFILE_PATH: /tests/basic.py
+      LOCUST_MODE: master
+  
+  locust-slave:
+    <<: *common
+    environment:
+      <<: *common-env
+      LOCUST_MODE: slave
+      LOCUST_MASTER_HOST: locust-master
