@@ -10,7 +10,6 @@ x-common: &common
     INPUT_WINDOW: ${INPUT_WINDOW}
     INPUT_TIMEZONE: ${INPUT_TIMEZONE}
     GRAPHITE_HOST: ${GRAPHITE_HOST}
-
   volumes:
     - ~/sandbox/locust/examples:/tests
 
